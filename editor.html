@@ -1,0 +1,43 @@
+<html lang="en">
+<head>
+<title>Notes</title>
+<style type="text/css" media="screen">
+    #editor { 
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+    }
+</style>
+</head>
+<body>
+
+<div id="editor"></div>
+    
+<script src="https://cdn.jsdelivr.net/npm/ace-builds@1.43.6/src-min-noconflict/ace.min.js" type="text/javascript" charset="utf-8"></script>
+<script>
+    if (localStorage.getItem("notes") == null) localStorage.setItem("notes", "");
+    var editor = ace.edit("editor");
+    editor.setTheme("ace/theme/monokai");
+    editor.session.setMode("ace/mode/plain_text");
+    editor.setValue(localStorage.getItem("notes"));
+    editor.clearSelection();
+    var i = editor.session.getLength() - 1;
+    var line;
+    var Range = ace.require("ace/range").Range;
+    line = editor.session.getLine(i);
+    var range = new Range(i, line.length, i, line.length);
+    editor.selection.setSelectionRange(range, false);
+    editor.focus();
+    editor.session.on('change', function(delta) {
+        // delta.start, delta.end, delta.lines, delta.action
+        localStorage.setItem("notes", editor.getValue());
+    });
+    window.addEventListener("focus", e => {
+        editor.setValue(localStorage.getItem("notes"));
+        editor.clearSelection();
+    });
+</script>
+</body>
+</html>

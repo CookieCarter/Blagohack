@@ -1,0 +1,27 @@
+{
+    "manifest_version": 3,
+    "name": "Blagohack",
+    "description": "Gives extra information to NAO nethack.",
+    "version": "1.0",
+    "content_scripts": [
+        {
+            "js": [
+                "blagohack.js",
+                "corpses.js",
+                "elbereth.js",
+                "forceTabs.js",
+                "messages.js",
+                "magicMarker.js",
+                "wish.js",
+                "notes.js",
+                "praytime.js",
+                "intrinsics.js",
+                "stats.js"
+            ],
+            "matches": [
+                "https://www.alt.org/nethack/hterm/"
+            ],
+            "world": "MAIN"
+        }
+    ]
+}
