@@ -154,6 +154,8 @@ function showMenu(items, callback) {
         char = String.fromCharCode(char.charCodeAt(0)+1);
         printf(`${char}: ${item}\x1B[K\r\n`);
     });
+    // Escape if its a special character.
+    char = char.replace(/[.*+?^${}()|[\]\\]/, '\\$&');
     printf("=> \x1B[K");
     waitFor = [new RegExp(`[A-${char}]`), function(s) {
         // Restore screen and cursor
