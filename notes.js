@@ -84,8 +84,7 @@ var shoptypes = {
 };
 
 Object.keys(shoptypes).forEach(shoptype => {
-    // For some reason if you add a " to the beginning of this it fails
-    onMatchEx(new RegExp(`[^\\e]+Welcome(?: again)? to .*? (${shoptype})!"`), 0,  function(match) {noteOnce(`Level has a ${shoptypes[match[1]]} store`)});
+    onMatchEx(new RegExp(`".+?, .+?!  Welcome(?: again)? to .*? (${shoptype})!"`), 0,  function(match) {noteOnce(`Level has a ${shoptypes[match[1]]} store`)});
 });
 
 // nonshop special rooms
