@@ -48,7 +48,6 @@ var editor = "PGh0bWwgbGFuZz1lbj48dGl0bGU+Tm90ZXM8L3RpdGxlPjxzdHlsZSBtZWRpYT1zY3
 
 extendedCommand("notes", function() {
     window.open(URL.createObjectURL(new Blob([atob(editor)], { type: "text/html" })), "_blank");
-    printLine("", 0);
 })
 
 // set up some autonotes

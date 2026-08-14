@@ -9,11 +9,11 @@ To load this script in firefox, zip the entire project and then go to [about:deb
 To load this in chrome go to [about:extensions](about:extensions), enable developer mode and click "Load unpacked", then select the folder containing this project.
 
 ### Password
-Your password is stored in local storage which is not very secure. You can set your username and password using the following commands.
+Your password is stored in local storage which is not very secure. You can set your username and password using the following extended commands.
 
-```js
-localStorage.setItem("username", "example_username");
-localStorage.setItem("password", "example_password");
+```
+# username example_username
+# password example_password
 ```
 
 You can set only your username and it will still enter that automatically.

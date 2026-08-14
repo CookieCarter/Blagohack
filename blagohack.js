@@ -7,6 +7,7 @@ var rows = [];
 var isAnnotation = false;
 var preface = "";
 var waitFor = [null, null];
+var connected = false;
 
 var username = localStorage.getItem("username");
 if (username == null) {
@@ -137,6 +138,8 @@ function checkExtended() {
         // Ensure that extended command box is gone before next command
         preface = "\x1B\x1B";
 
+        // Clear the command
+        printLine("", 0);
         extendedCommands[cmd[1]](cmd[2]);
         return true;
     }
@@ -203,6 +206,16 @@ function onMatchEx(match, line, func, ...args) {
     });
 }
 
+extendedCommand("username", function(username) {
+    username = username;
+    localStorage.setItem("username", username);
+});
+
+extendedCommand("password", function(password) {
+    password = password;
+    localStorage.setItem("password", password);
+});
+
 
 // Key and screen events
 
@@ -251,6 +264,11 @@ function onKey(s) {
 
 // Called when screen is updated (normally)
 function onScreen() {
+    if (!connected) {
+        connected = true;
+        onConnect();
+    }
+
     rows = term_.io.terminal_.document_.querySelectorAll("x-row");
 
     clearAnnotation();
@@ -273,41 +291,26 @@ function onConnect() {
 
 
 // Hterm hooks
-
-WSTTY.prototype.connect = function(addr) {
-    this.statusMenu("Connecting...", true);
-    this.ws = new WebSocket(addr +
-                            "?c=" + this.io.columnCount +
-                            "&l=" + this.io.rowCount);
-    this.ws.binaryType = "arraybuffer";
-
-    this.ws.onmessage = function(msg) {
-        if (!msg || !msg.data)
-            return;
-        if (typeof msg.data === "string")
-            return;
-        this.io.writeUTF8(
-            String.fromCharCode.apply(
-                String, new Uint8Array(msg.data)));
-    }.bind(this)
-    this.ws.onerror = this.statusMenu.bind(this, "Connection error.", false);
-    this.ws.onclose = this.statusMenu.bind(this, "Connection closed.", false);
-
-    this.ws.addEventListener("open", (event) => {
+var interval = setInterval(function() {
+    try {
         onVTKeystrokeOld = window.term_.io.onVTKeystroke;
         window.term_.io.onVTKeystroke = function(s) {
             if (!onKey(s))
                 onVTKeystrokeOld(s);
         }
+        
+        term_.io.print = function(string) {
+            if (this.terminal_.io != this) {
+                this.buffered_ += string;
+                return;
+            }
+        
+          this.terminal_.interpret(string);
+        
+          onScreen();
+        };
 
-        window.term_.io.writeUTF8 = function (string) {
-            if (this.terminal_.io != this)
-                throw 'Attempt to print from inactive IO object.';
-            
-            this.terminal_.interpret(string);
-
-            onScreen();
-        }
-        onConnect()
-    });
-};
+        clearInterval(interval);
+    } catch (error) {
+    }
+}, 100);

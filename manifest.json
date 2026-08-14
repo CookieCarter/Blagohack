@@ -15,8 +15,8 @@
                 "wish.js",
                 "notes.js",
                 "praytime.js",
-                "intrinsics.js",
-                "stats.js"
+                "stats.js",
+                "intrinsics.js"
             ],
             "matches": [
                 "https://www.alt.org/nethack/hterm/"
