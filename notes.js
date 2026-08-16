@@ -29,7 +29,7 @@ function makeNote(note) {
         return;
 
     // If there is not a newline add one
-    if (notes.at(-1) != "\n")
+    if (notes.length && notes.at(-1) != "\n")
         notes += "\n";
 
     notes += `T:${stats.turncount} ${stats.dlvl} ${note}\n`;
